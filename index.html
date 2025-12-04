@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="x-poe-datastore-behavior" content="local_only">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; connect-src 'self' https://openrouter.ai; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Chi Tiêu Thông Minh</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://puc.poecdn.net/authenticated_preview_page/syncedState.3f7572448765332f3047.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-wallet"></i> Quản Lý Chi Tiêu Thông Minh</h1>
+            <div class="header-actions">
+                <button class="icon-btn" id="themeToggle" title="Chuyển chế độ tối/sáng">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="icon-btn" id="settingsBtn" title="Cài đặt">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button class="icon-btn" id="exportBtn" title="Xuất dữ liệu">
+                    <i class="fas fa-download"></i>
+                </button>
+                <input type="file" id="importFile" accept=".json" style="display: none;">
+                <button class="icon-btn" id="importBtn" title="Nhập dữ liệu">
+                    <i class="fas fa-upload"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="main-grid">
+            <div>
+                <div class="card">
+                    <div class="card-title">
+                        <i class="fas fa-chart-line"></i>
+                        Tổng quan
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-arrow-up"></i> Tổng thu
+                            </div>
+                            <div class="stat-value income" id="totalIncome">0₫</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-arrow-down"></i> Tổng chi
+                            </div>
+                            <div class="stat-value expense" id="totalExpense">0₫</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-balance-scale"></i> Số dư
+                            </div>
+                            <div class="stat-value balance" id="balance">0₫</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 24px;">
+                    <div class="card-title">
+                        <i class="fas fa-tags"></i>
+                        Chi tiêu theo hạng mục
+                    </div>
+                    <div class="categories-grid" id="categoriesGrid">
+                        </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="card">
+                    <div class="input-section">
+                        <div class="input-wrapper">
+                            <textarea id="naturalInput" placeholder="Nhập giao dịch bằng ngôn ngữ tự nhiên...
+
+Ví dụ:
+• Hôm nay kiếm được 3 triệu từ lương
+• Mua rau hết 10k, mua sữa cho con hết 500k
+• Chi 200k tiền điện, 150k tiền nước
+• Nhận thưởng 5 triệu"></textarea>
+                            <button class="btn" id="analyzeBtn">
+                                <i class="fas fa-magic"></i>
+                                Phân tích với AI
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card-title" style="margin-top: 20px;">
+                        <i class="fas fa-history"></i>
+                        Lịch sử giao dịch
+                    </div>
+                    <div class="transactions-list" id="transactionsList">
+                        <div class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Chưa có giao dịch nào. Hãy nhập giao dịch của bạn bên trên!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-cog"></i> Cài đặt AI</h2>
+                <button class="close-btn" id="closeSettings"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Chọn nhà cung cấp AI</label>
+                <div class="ai-provider-selector">
+                    <div class="provider-option active" data-provider="poe">
+                        <i class="fas fa-robot" style="font-size: 24px; margin-bottom: 8px;"></i>
+                        <div style="font-weight: 600;">Poe AI</div>
+                        <div style="font-size: 12px; margin-top: 4px; opacity: 0.8;">Mặc định</div>
+                    </div>
+                    <div class="provider-option" data-provider="openrouter">
+                        <i class="fas fa-network-wired" style="font-size: 24px; margin-bottom: 8px;"></i>
+                        <div style="font-weight: 600;">OpenRouter</div>
+                        <div style="font-size: 12px; margin-top: 4px; opacity: 0.8;">Tùy chỉnh</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="poeSettings">
+                <div class="form-group">
+                    <label class="form-label">Bot Poe</label>
+                    <select class="form-input" id="poeBot">
+                        <option value="GPT-5.1">GPT-5.1 (Mặc định)</option>
+                        <option value="Claude-Sonnet-4.5">Claude-Sonnet-4.5</option>
+                        <option value="Gemini-3.0-Pro">Gemini-3.0-Pro</option>
+                        <option value="Grok-4-Fast-Non-Reasoning">Grok-4-Fast-Non-Reasoning</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="openrouterSettings" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">API Key OpenRouter</label>
+                    <input type="password" class="form-input" id="openrouterKey" placeholder="sk-or-v1-...">
+                </div>
+                <button class="btn btn-secondary" id="testKeyBtn" style="width: auto;">
+                    <i class="fas fa-check-circle"></i>
+                    Test API Key &amp; Lấy Models
+                </button>
+                <div id="keyTestResult"></div>
+
+                <div class="form-group" id="modelSelectGroup" style="display: none;">
+                    <label class="form-label">Chọn Model</label>
+                    <select class="form-input" id="openrouterModel">
+                        <option value="">-- Chọn model --</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn" id="saveSettingsBtn" style="margin-top: 20px;">
+                <i class="fas fa-save"></i>
+                Lưu cài đặt
+            </button>
+        </div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
