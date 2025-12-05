@@ -102,7 +102,8 @@ Format:
         headers: {
             'Authorization': `Bearer ${settings.openrouterKey}`,
             'Content-Type': 'application/json',
-            'HTTP-Referer': window.location.href
+            'HTTP-Referer': window.location.href,
+            'X-Title': 'Chi Tieu App'
         },
         body: JSON.stringify({
             model: settings.openrouterModel,

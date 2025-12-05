@@ -1,6 +1,17 @@
 import { settings, setSettings } from './state.js';
-import { saveToIndexedDB } from './db.js';
+import { saveToIndexedDB, getFromIndexedDB } from './db.js';
 import { showSuccess, showError } from './utils.js';
+
+export async function loadSettings() {
+    try {
+        const storedSettings = await getFromIndexedDB('settings', 'appSettings');
+        if (storedSettings) {
+            setSettings(storedSettings.value);
+        }
+    } catch (error) {
+        console.error('Error loading settings:', error);
+    }
+}
 
 export function openSettings() {
     document.getElementById('settingsModal').classList.add('active');
