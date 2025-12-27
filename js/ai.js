@@ -5,6 +5,7 @@ import { showSuccess, showError } from './utils.js';
 export async function analyzeWithAI(text) {
     const analyzeBtn = document.getElementById('analyzeBtn');
     analyzeBtn.disabled = true;
+    analyzeBtn.classList.add('loading');
     analyzeBtn.innerHTML = '<span class="loading"></span> Đang phân tích...';
 
     try {
@@ -17,6 +18,7 @@ export async function analyzeWithAI(text) {
         showError('Lỗi khi phân tích: ' + error.message);
     } finally {
         analyzeBtn.disabled = false;
+        analyzeBtn.classList.remove('loading');
         analyzeBtn.innerHTML = '<i class="fas fa-magic"></i> Phân tích với AI';
     }
 }

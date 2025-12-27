@@ -89,8 +89,8 @@ h1 {
 .icon-btn {
     background: var(--bg-tertiary);
     border: none;
-    width: 42px;
-    height: 42px;
+    width: 48px;
+    height: 48px;
     border-radius: 12px;
     cursor: pointer;
     display: flex;
@@ -99,6 +99,8 @@ h1 {
     color: var(--text-primary);
     transition: all 0.3s ease;
     font-size: 18px;
+    min-width: 44px;
+    min-height: 44px;
 }
 
 .icon-btn:hover {
@@ -575,6 +577,15 @@ select.form-input {
     background: var(--accent-secondary);
 }
 
+.chart-container {
+    position: relative;
+    height: 300px;
+    margin-top: 16px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 16px;
+}
+
 @media (max-width: 640px) {
     .container {
         padding: 12px;
@@ -598,9 +609,171 @@ select.form-input {
     }
 }
 
+@media (max-width: 480px) {
+    .container {
+        padding: 8px;
+    }
+
+    header {
+        padding: 12px;
+        margin-bottom: 16px;
+    }
+
+    h1 {
+        font-size: 18px;
+    }
+
+    .stat-value {
+        font-size: 24px;
+    }
+
+    .card {
+        padding: 12px;
+        margin-bottom: 16px;
+    }
+
+    .card-title {
+        font-size: 16px;
+        margin-bottom: 16px;
+    }
+
+    .transaction-item {
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+
+    .transaction-category {
+        font-size: 11px;
+        padding: 3px 8px;
+    }
+
+    .transaction-description {
+        font-size: 13px;
+    }
+
+    .transaction-date {
+        font-size: 11px;
+    }
+
+    .transaction-amount {
+        font-size: 18px;
+    }
+
+    .btn {
+        padding: 12px 20px;
+        font-size: 15px;
+    }
+
+    .category-card {
+        padding: 12px;
+    }
+
+    .category-name {
+        font-size: 13px;
+    }
+
+    .category-amount {
+        font-size: 14px;
+    }
+}
+
 @keyframes fadeOut {
     to {
         opacity: 0;
         transform: translateY(-10px);
     }
+}
+
+.reports-section {
+    margin-top: 24px;
+}
+
+.reports-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.reports-table th,
+.reports-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.reports-table th {
+    font-weight: 600;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.reports-table tbody tr:hover {
+    background: var(--bg-tertiary);
+}
+
+.reports-table .income {
+    color: var(--success);
+}
+
+.reports-table .expense {
+    color: var(--danger);
+}
+
+/* Enhanced Animations and Hover Effects */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.9; }
+}
+
+.btn.loading {
+    animation: pulse 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+.alert.success {
+    animation: bounce 0.6s ease-out;
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 5px var(--accent-primary); }
+    50% { box-shadow: 0 0 20px var(--accent-primary); }
+    100% { box-shadow: 0 0 5px var(--accent-primary); }
+}
+
+.icon-btn:hover {
+    animation: glow 0.5s ease-in-out;
+}
+
+.category-card {
+    position: relative;
+}
+
+.category-card:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--shadow);
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 10;
+    opacity: 1;
+    pointer-events: none;
+}
+
+.transaction-item {
+    animation-delay: calc(var(--index) * 0.1s);
 }

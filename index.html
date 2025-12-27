@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="style.css">
     
     <script src="https://puc.poecdn.net/authenticated_preview_page/syncedState.3f7572448765332f3047.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
@@ -72,6 +73,16 @@
                     <div class="categories-grid" id="categoriesGrid">
                         </div>
                 </div>
+
+                <div class="card" style="margin-top: 24px;">
+                    <div class="card-title">
+                        <i class="fas fa-chart-pie"></i>
+                        Biểu đồ chi tiêu theo hạng mục
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="expensePieChart"></canvas>
+                    </div>
+                </div>
             </div>
 
             <div>
@@ -103,6 +114,24 @@ Ví dụ:
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="reports-section">
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-chart-line"></i>
+                    Báo cáo chi tiêu theo tháng
+                </div>
+                <div id="monthlyReports"></div>
+            </div>
+
+            <div class="card" style="margin-top: 24px;">
+                <div class="card-title">
+                    <i class="fas fa-chart-bar"></i>
+                    Báo cáo chi tiêu theo năm
+                </div>
+                <div id="yearlyReports"></div>
             </div>
         </div>
     </div>

@@ -61,3 +61,14 @@ export function getAllFromIndexedDB(storeName) {
         request.onerror = () => reject(request.error);
     });
 }
+
+export function deleteFromIndexedDB(storeName, key) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction([storeName], 'readwrite');
+        const store = transaction.objectStore(storeName);
+        const request = store.delete(key);
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}

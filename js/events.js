@@ -4,6 +4,7 @@ import { openSettings, closeSettings, saveSettingsFromModal, testOpenRouterKey }
 import { exportData, importData, handleImportFile } from './data.js';
 import { settings, setSettings } from './state.js';
 import { showError } from './utils.js';
+import { deleteTransaction } from './ui.js';
 
 export function setupEventListeners() {
     document.getElementById('analyzeBtn').addEventListener('click', () => {
@@ -48,4 +49,75 @@ export function setupEventListeners() {
             document.getElementById('analyzeBtn').click();
         }
     });
+
+    // Swipe gestures for mobile
+    setupSwipeGestures();
+}
+
+function setupSwipeGestures() {
+    const transactionsList = document.getElementById('transactionsList');
+
+    transactionsList.addEventListener('touchstart', handleTouchStart, { passive: false });
+    transactionsList.addEventListener('touchmove', handleTouchMove, { passive: false });
+    transactionsList.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isSwiping = false;
+    let currentItem = null;
+
+    function handleTouchStart(e) {
+        const touch = e.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        isSwiping = true;
+        currentItem = e.target.closest('.transaction-item');
+    }
+
+    function handleTouchMove(e) {
+        if (!isSwiping || !currentItem) return;
+
+        const touch = e.touches[0];
+        currentX = touch.clientX;
+        currentY = touch.clientY;
+
+        const diffX = currentX - startX;
+        const diffY = currentY - startY;
+
+        // Only horizontal swipe
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+            e.preventDefault();
+            const translateX = Math.max(diffX, -100); // Max swipe left 100px
+            currentItem.style.transform = `translateX(${translateX}px)`;
+        }
+    }
+
+    function handleTouchEnd(e) {
+        if (!isSwiping || !currentItem) return;
+
+        const diffX = currentX - startX;
+        const threshold = 50;
+
+        if (diffX < -threshold) {
+            // Swipe left - delete
+            currentItem.style.transform = 'translateX(-100px)';
+            currentItem.style.opacity = '0';
+            setTimeout(() => {
+                deleteTransaction(currentItem);
+            }, 300);
+        } else {
+            // Reset position
+            currentItem.style.transform = '';
+        }
+
+        isSwiping = false;
+        currentItem = null;
+    }
+
+    function deleteTransaction(item) {
+        const id = parseInt(item.dataset.id);
+        deleteTransaction(id);
+    }
 }
