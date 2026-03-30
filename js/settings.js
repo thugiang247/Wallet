@@ -82,8 +82,20 @@ export async function testOpenRouterKey() {
             }
         });
 
+
         if (!response.ok) {
-            throw new Error('API key không hợp lệ');
+            if (response.status === 429) {
+                throw new Error('API key bị giới hạn tốc độ (Rate Limit) hoặc hết credits trên OpenRouter.');
+            }
+            
+            let errorMsg = 'API key không hợp lệ hoặc lỗi kết nối';
+            try {
+                const errData = await response.json();
+                errorMsg = errData.error?.message || errorMsg;
+            } catch (e) {
+                errorMsg = `Lỗi ${response.status}: ${response.statusText}`;
+            }
+            throw new Error(errorMsg);
         }
 
         const data = await response.json();

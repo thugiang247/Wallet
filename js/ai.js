@@ -116,8 +116,18 @@ Format:
     });
 
     if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error?.message || 'Lỗi từ OpenRouter API');
+        if (response.status === 429) {
+            throw new Error('Bạn đã hết hạn mức hoặc bị giới hạn tốc độ (Rate Limit) trên OpenRouter. Vui lòng kiểm tra số dư credits hoặc thử lại sau ít phút.');
+        }
+        
+        let errorMsg = 'Lỗi từ OpenRouter API';
+        try {
+            const error = await response.json();
+            errorMsg = error.error?.message || errorMsg;
+        } catch (e) {
+            errorMsg = `Lỗi ${response.status}: ${response.statusText}`;
+        }
+        throw new Error(errorMsg);
     }
 
     const data = await response.json();
