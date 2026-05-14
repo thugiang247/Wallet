@@ -78,7 +78,9 @@ export async function testOpenRouterKey() {
         const response = await fetch('https://openrouter.ai/api/v1/models', {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'HTTP-Referer': 'https://chitieu.app',
+                'X-Title': 'Chi Tieu App'
             }
         });
 
