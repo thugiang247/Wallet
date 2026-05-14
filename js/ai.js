@@ -99,12 +99,14 @@ Yêu cầu:
 Format:
 [{"type":"income","amount":3000000,"category":"Lương","description":"Lương tháng"},{"type":"expense","amount":10000,"category":"Ăn uống","description":"Mua rau"}]`;
 
+    const siteUrl = window.location.href.startsWith('http') ? window.location.href : 'https://chitieu.app';
+
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${settings.openrouterKey}`,
+            'Authorization': `Bearer ${settings.openrouterKey.trim()}`,
             'Content-Type': 'application/json',
-            'HTTP-Referer': window.location.href,
+            'HTTP-Referer': siteUrl,
             'X-Title': 'Chi Tieu App'
         },
         body: JSON.stringify({

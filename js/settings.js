@@ -41,7 +41,7 @@ export function closeSettings() {
 export async function saveSettingsFromModal() {
     setSettings({
         poeBot: document.getElementById('poeBot').value,
-        openrouterKey: document.getElementById('openrouterKey').value,
+        openrouterKey: document.getElementById('openrouterKey').value.trim(),
         openrouterModel: document.getElementById('openrouterModel').value,
         provider: settings.provider
     });
